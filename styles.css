@@ -31,11 +31,6 @@
     box-sizing: border-box; /* Pour inclure les marges dans la largeur de l'élément */
 }
 
-.maillots-link {
-    text-align: left;
-    
-}
-
 .maillotImage {
     border: 1px solid blue;
     width: 200px; 
@@ -47,3 +42,24 @@
     max-width: 100%; /* Pour s'assurer que l'image ne dépasse pas la largeur de l'élément parent */
     height: auto; /* Ajustement automatique de la hauteur en fonction de la largeur */
 }
+
+
+.maillot-details{
+    border: 1px solid red;
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+
+.maillot-details-image{
+    border: 1px solid green;
+    width: 520px; 
+    height: 725px;
+}
+
+.maillot-details-info{
+    border: 1px solid blue;
+    
+}
+
