@@ -1,18 +1,49 @@
+/* styles.css */
+
+.wrapper {
+    border: 2px solid red;
+    margin: 15px;
+    padding: 15px;
+}
+
 .maillots {
-    border: 1px solid red;
+    display: inline-block; /* ou float: left; */
+    border: 1px solid green;
     margin: 10px;
     padding: 10px;
     background-color: #f9f9f9;
+}
+
+.meilleuresVues {
+    border: 1px solid orange;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: flex-start; /* Ajuste l'alignement vertical au début de la ligne */
 }
 
 .best {
-    display: inline-block; /* ou float: left; */
-    border: 1px solid red;
+    text-align: center; /* Aligner le texte au centre si nécessaire */
     margin: 10px;
     padding: 10px;
     background-color: #f9f9f9;
+    flex: 0 0 calc(20% - 20px); /* Calcul de la largeur pour que 5 éléments tiennent sur une ligne */
+    box-sizing: border-box; /* Pour inclure les marges dans la largeur de l'élément */
 }
 
 .maillots-link {
-    text-decoration: none;
+    text-align: left;
+    
+}
+
+.maillotImage {
+    border: 1px solid blue;
+    width: 200px; 
+    height: 175px;
+}
+
+.maillotImageBest {
+    border: 1px solid blue;
+    max-width: 100%; /* Pour s'assurer que l'image ne dépasse pas la largeur de l'élément parent */
+    height: auto; /* Ajustement automatique de la hauteur en fonction de la largeur */
 }

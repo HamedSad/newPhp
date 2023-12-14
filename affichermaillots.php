@@ -9,34 +9,33 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="wrapper">
+
     <?php
     include 'functions.php'; 
+    include 'meilleuresVues.php';
     $allMaillots = getAllMaillots();
-    
+
+    echo '<h1>Tous nos maillots</h1>';
     // Affichage de tous les maillots
     foreach ($allMaillots as $maillot) {
-        echo '<a href="maillot_details.php?id=' . $maillot['id'] . '" class="maillots-link">'; // Ajout du lien autour de la div
+        echo '<a href="maillot_details.php?id=' . $maillot['id'] . '" class="maillots-link">'; 
         echo '<div class="maillots">';
-        echo '<p>Équipe: ' . $maillot['equipe'] . '</p>';
-        echo '<p>Couleur: ' . $maillot['couleur'] . '</p>';
-        echo '<p>Prix: ' . $maillot['prix'] . '</p>';
-        echo '<p>Date: ' . $maillot['date'] . '</p>';
+        // Ajout de l'image cliquable
+        echo '<a href="maillot_details.php?id=' . $maillot['id'] . '">';
+        echo '<img src="' . $maillot['photo'] . '" alt="Image du maillot" class="maillotImage">';
+        echo '</a>';
+        echo '<p>' .$maillot['joueur'] . '</p>';
+        echo '<p>' . $maillot['equipe'] . '</p>';
+        echo '<p>' . $maillot['saison'] . '</p>';
+        echo '<p>' . $maillot['prix'] . '€</p>';
         echo '</div>';
-        echo '</a>'; // Fermeture du lien
+        echo '</a>';
     }
     ?>
-    <p>Les articles les plus consultés</p>
-    <?php
-    $meilleuresVues = getMeilleuresVues();
-    // Affichage de tous les maillots en fonction des vues
-    foreach ($meilleuresVues as $maillot) {
-        echo '<div class="best">';
-        echo '<p>Équipe: ' . $maillot['equipe'] . '</p>';
-        echo '<p>Couleur: ' . $maillot['couleur'] . '</p>';
-        echo '<p>Prix: ' . $maillot['prix'] . '</p>';
-        echo '<p>Date: ' . $maillot['date'] . '</p>';
-        echo '</div>';
-    }
-    ?>
+    
+    
+    </div>
+
 </body>
 </html>

@@ -14,9 +14,9 @@
         </p>
         
         <ul>
-        <li style="color: blue;">Texte en bleu</li>
-        <li style="color: red;">Texte en rouge</li>
-        <li style="color: green;">Texte en vert</li>
+        <li style="color: blue;">Maillots de collection</li>
+        <li style="color: red;">Chaussures</li>
+        <li style="color: green;">Reste</li>
         </ul>
         
         <?php

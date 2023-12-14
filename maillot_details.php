@@ -25,7 +25,7 @@ include 'functions.php'; // Assurez-vous d'ajuster le chemin si nécessaire
         <p>Équipe: <?= $maillot['equipe'] ?></p>
         <p>Couleur: <?= $maillot['couleur'] ?></p>
         <p>Prix: <?= $maillot['prix'] ?></p>
-        <p>Date: <?= $maillot['date'] ?></p>
+        <p>Joueur: <?= $maillot['joueur'] ?></p>
     </div>
 
 </body>
