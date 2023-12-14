@@ -22,10 +22,13 @@ include 'functions.php'; // Assurez-vous d'ajuster le chemin si nécessaire
 ?>
 
     <div class="maillot-details">
-        <p>Équipe: <?= $maillot['equipe'] ?></p>
-        <p>Couleur: <?= $maillot['couleur'] ?></p>
-        <p>Prix: <?= $maillot['prix'] ?></p>
-        <p>Joueur: <?= $maillot['joueur'] ?></p>
+        <img src="<?= $maillot['photo'] ?>" alt="Image du maillot" class="maillot-details-image">
+        <div class="maillot-details-info">
+            <p>Équipe: <?= $maillot['equipe'] ?></p>
+            <p>Couleur: <?= $maillot['couleur'] ?></p>
+            <p>Prix: <?= $maillot['prix'] ?></p>
+            <p>Joueur: <?= $maillot['joueur'] ?></p>
+        </div>
     </div>
 
 </body>
