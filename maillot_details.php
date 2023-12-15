@@ -15,6 +15,7 @@
 <body>
 
 <?php
+include 'banner.php';
 include 'functions.php';
 
 $maillotId = $_GET['id'];
@@ -25,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Si le formulaire a été soumis, mettre à jour l'état "liked" dans la base de données
     updateLikedStatus($maillotId, !$maillot['liked']);
     $maillot = getMaillotById($maillotId); // Mettre à jour la variable $maillot après la mise à jour
+    
 }
 
 ?>
@@ -45,7 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
 
         <!-- Ajoutez le bouton "Update" -->
-        <a href="updateJersey.php?id=<?= $maillotId ?>" class="update-button">Update</a>
+        <a href="updateJersey.php?id=<?= $maillotId ?>" class="update-button">Mettre à jour</a>
+
+        <!-- Ajoutez le bouton "Delete" -->
+        <a href="confirmationDelete.php?id=<?= $maillotId ?>" class="update-button">supprimer</a>
+
     </div>
 </div>
 

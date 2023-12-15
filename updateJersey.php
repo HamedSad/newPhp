@@ -1,6 +1,7 @@
 <?php
 // Inclure le fichier de fonctions
 include 'functions.php';
+include 'banner.php';
 
 // Vérifier si l'ID du maillot est passé en paramètre
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
@@ -41,10 +42,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
            // Le maillot a été mis à jour avec succès
            $updateFeedbackClass = 'update-success';
            echo '<script>alert("Mise à jour réussie!");</script>';
-           echo '<script>
-            window.location.href = "maillot_details.php?id=' . $jersey_id . '";
+           echo '<script>window.location.href = "maillot_details.php?id=' . $jersey_id . '";
            </script>';
-       } else {
+            } else {
            echo "Erreur lors de la mise à jour du maillot.";
         }
     }

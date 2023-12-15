@@ -1,16 +1,8 @@
 <!-- newJersey.php   -->
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajouter un Maillot</title>
-</head>
-<body>
-
 <?php
+session_start();
 include 'functions.php';
+include 'banner.php';
 // include_once 'connexion.php';
 
 // Vérifier si le formulaire a été soumis
@@ -25,17 +17,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prix = $_POST['prix'];
     $liked = "0";
     $vues = 0;
-    newJersey($photo, $joueur, $equipe, $saison, $pays, $couleur, $prix, $liked, $vues);
-    header("Location: affichermaillots.php");
-    exit();
+    // Appeler la fonction pour ajouter le maillot
+    $jersey_id = newJersey($photo, $joueur, $equipe, $saison, $pays, $couleur, $prix, $liked, $vues);
+
+    
+    if ($jersey_id !== false) {
+        // Maillot ajouté avec succès
+        $_SESSION['success_message'] = "Maillot créé, bitch!";
+        echo '<script>alert("Mise à jour réussie!");</script>';
+        echo '<script>
+                setTimeout(function(){window.location.href = "affichermaillots.php";}, 2000); 
+              </script>';
+        exit();
+    } else {
+        // Erreur lors de l'ajout du maillot
+        $_SESSION['error_message'] = "Erreur lors de l'ajout du maillot.";
+        header("Location: newJersey.php");
+        exit();
+    }
 }
 
+
 ?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter un Maillot</title>
+</head>
+<body>
 
 <h2>Ajouter un Maillot</h2>
 
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-
     <label for="photo">Photo:</label>
     <input type="text" name="photo"><br>
 

@@ -13,7 +13,9 @@
 
     <?php
     include 'functions.php'; 
+    include 'banner.php';
     include 'meilleuresVues.php';
+    
     $allMaillots = getAllMaillots();
 
     echo '<h1>Tous nos maillots</h1>';

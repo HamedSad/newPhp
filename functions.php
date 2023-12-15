@@ -1,6 +1,5 @@
 <?php
 // functions.php
-
 function connectDatabase()
 {
     try {
@@ -70,11 +69,7 @@ function getMeilleuresVues(){
 
 }
 
-
-function newJersey($photo, $joueur, $equipe, $saison, $pays, $couleur, $prix, $liked, $vues)
-
-
-{
+function newJersey($photo, $joueur, $equipe, $saison, $pays, $couleur, $prix, $liked, $vues){
     
     try {
         $mysqlClient = connectDatabase();
@@ -103,8 +98,7 @@ function newJersey($photo, $joueur, $equipe, $saison, $pays, $couleur, $prix, $l
     }
 }
 
-function updateLikedStatus($maillotId, $liked)
-{
+function updateLikedStatus($maillotId, $liked){
     $mysqlClient = connectDatabase();
 
     $sqlUpdate = 'UPDATE maillot SET liked = :liked WHERE id = :id';
@@ -112,6 +106,22 @@ function updateLikedStatus($maillotId, $liked)
     $updateStatement->bindParam(':id', $maillotId, PDO::PARAM_INT);
     $updateStatement->bindParam(':liked', $liked, PDO::PARAM_BOOL);
     $updateStatement->execute();
+}
+
+function deleteMaillot($maillotId) {
+    try {
+        // Remplacez les informations de connexion par les vôtres
+        $pdo = new PDO("mysql:host=localhost;dbname=tests", "root", "root");
+
+        // Préparez et exécutez la requête de suppression
+        $query = "DELETE FROM maillot WHERE id = :id";
+        $statement = $pdo->prepare($query);
+        $statement->bindParam(':id', $maillotId, PDO::PARAM_INT);
+        $statement->execute();
+    } catch (PDOException $e) {
+        // Gérez les erreurs de suppression (par exemple, enregistrer dans un fichier journal)
+        echo "Erreur de suppression : " . $e->getMessage();
+    }
 }
 
 ?>
