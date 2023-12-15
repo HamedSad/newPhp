@@ -70,4 +70,48 @@ function getMeilleuresVues(){
 
 }
 
+
+function newJersey($photo, $joueur, $equipe, $saison, $pays, $couleur, $prix, $liked, $vues)
+
+
+{
+    
+    try {
+        $mysqlClient = connectDatabase();
+
+        $sql = "INSERT INTO maillot (photo, joueur, equipe, saison, pays, couleur, prix, liked, vues) 
+                VALUES (:photo, :joueur, :equipe, :saison, :pays, :couleur, :prix, :liked, :vues)";
+        
+        $insertStatement = $mysqlClient->prepare($sql);
+
+        // Liaison des valeurs des paramètres
+        $insertStatement->bindParam(':photo', $photo, PDO::PARAM_STR);
+        $insertStatement->bindParam(':joueur', $joueur, PDO::PARAM_STR);
+        $insertStatement->bindParam(':equipe', $equipe, PDO::PARAM_STR);
+        $insertStatement->bindParam(':saison', $saison, PDO::PARAM_STR);
+        $insertStatement->bindParam(':pays', $pays, PDO::PARAM_STR);
+        $insertStatement->bindParam(':couleur', $couleur, PDO::PARAM_STR);
+        $insertStatement->bindParam(':prix', $prix, PDO::PARAM_STR);
+        $insertStatement->bindParam(':liked', $liked, PDO::PARAM_STR);
+        $insertStatement->bindParam(':vues', $vues, PDO::PARAM_STR);
+
+        // Exécution de la requête
+        $insertStatement->execute();
+
+    } catch (Exception $e) {
+        die('Erreur : ' . $e->getMessage());
+    }
+}
+
+function updateLikedStatus($maillotId, $liked)
+{
+    $mysqlClient = connectDatabase();
+
+    $sqlUpdate = 'UPDATE maillot SET liked = :liked WHERE id = :id';
+    $updateStatement = $mysqlClient->prepare($sqlUpdate);
+    $updateStatement->bindParam(':id', $maillotId, PDO::PARAM_INT);
+    $updateStatement->bindParam(':liked', $liked, PDO::PARAM_BOOL);
+    $updateStatement->execute();
+}
+
 ?>
