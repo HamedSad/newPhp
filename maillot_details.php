@@ -43,6 +43,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?= $maillot['liked'] ? 'Unlike' : 'Like'; ?>
             </button>
         </form>
+
+        <!-- Ajoutez le bouton "Update" -->
+        <a href="updateJersey.php?id=<?= $maillotId ?>" class="update-button">Update</a>
     </div>
 </div>
 
