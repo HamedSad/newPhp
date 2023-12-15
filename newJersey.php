@@ -10,10 +10,12 @@
 <body>
 
 <?php
-
+// Inclure votre connexion à la base de données ici
 // include_once 'connexion.php';
 
 // Vérifier si le formulaire a été soumis
+// ...
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Récupérer les données du formulaire
     $photo = $_POST['photo'];
@@ -60,6 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <label for="prix">Prix:</label>
     <input type="text" name="prix" required><br>
+
+    <!-- Ajoutez d'autres champs en fonction de votre table maillot -->
 
     <input type="submit" value="Ajouter">
 </form>
