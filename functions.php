@@ -70,4 +70,37 @@ function getMeilleuresVues(){
 
 }
 
+function newJersey($photo, $joueur, $equipe, $saison, $pays, $couleur, $prix, $likes, $vues)
+
+
+{
+    
+    try {
+        $mysqlClient = connectDatabase();
+
+        $sql = "INSERT INTO maillot (photo, joueur, equipe, saison, pays, couleur, prix, likes, vues) 
+                VALUES (:photo, :joueur, :equipe, :saison, :pays, :couleur, :prix, :likes, :vues)";
+        
+        $insertStatement = $mysqlClient->prepare($sql);
+
+        // Liaison des valeurs des paramètres
+        $insertStatement->bindParam(':photo', $photo, PDO::PARAM_STR);
+        $insertStatement->bindParam(':joueur', $joueur, PDO::PARAM_STR);
+        $insertStatement->bindParam(':equipe', $equipe, PDO::PARAM_STR);
+        $insertStatement->bindParam(':saison', $saison, PDO::PARAM_STR);
+        $insertStatement->bindParam(':pays', $pays, PDO::PARAM_STR);
+        $insertStatement->bindParam(':couleur', $couleur, PDO::PARAM_STR);
+        $insertStatement->bindParam(':prix', $prix, PDO::PARAM_STR);
+        $insertStatement->bindParam(':likes', $likes, PDO::PARAM_STR);
+        $insertStatement->bindParam(':vues', $vues, PDO::PARAM_STR);
+
+        // Exécution de la requête
+        $insertStatement->execute();
+
+    } catch (Exception $e) {
+        die('Erreur : ' . $e->getMessage());
+    }
+}
+
+
 ?>
