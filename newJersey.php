@@ -23,11 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if ($jersey_id !== false) {
         // Maillot ajouté avec succès
-        $_SESSION['success_message'] = "Maillot créé, bitch!";
-        echo '<script>alert("Mise à jour réussie!");</script>';
-        echo '<script>
-                setTimeout(function(){window.location.href = "affichermaillots.php";}, 2000); 
-              </script>';
+        echo '<script>alert("Maillot ajouté!");</script>';
+        echo '<script>window.location.href = "affichermaillots.php"; 
+            </script>';
         exit();
     } else {
         // Erreur lors de l'ajout du maillot

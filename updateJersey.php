@@ -40,12 +40,12 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
         if ($update_result) {
            // Le maillot a été mis à jour avec succès
-           $updateFeedbackClass = 'update-success';
-           echo '<script>alert("Mise à jour réussie!");</script>';
-           echo '<script>window.location.href = "maillot_details.php?id=' . $jersey_id . '";
-           </script>';
+        $updateFeedbackClass = 'update-success';
+        echo '<script>alert("Mise à jour réussie!");</script>';
+        echo '<script>window.location.href = "maillot_details.php?id=' . $jersey_id . '";
+        </script>';
             } else {
-           echo "Erreur lors de la mise à jour du maillot.";
+        echo "Erreur lors de la mise à jour du maillot.";
         }
     }
     } else {

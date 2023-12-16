@@ -2,25 +2,27 @@
 include 'functions.php';
 include 'banner.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])){
     // Si la confirmation est reçue, supprimer le maillot
     $maillotId = $_POST['maillot_id'];
     deleteMaillot($maillotId);
 
-    // Redirection vers une page après la suppression
-    header("Location: affichermaillots.php");
+    echo '<script>alert("Maillot supprimé!");</script>';
+    echo '<script>window.location.href = "affichermaillots.php"; 
+        </script>';
     exit();
-} elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
+
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
     // Si la requête est GET et l'ID est défini, récupérer les détails du maillot
     $maillotId = $_GET['id'];
     $maillot = getMaillotById($maillotId);
 
-    // Vérifier si les détails du maillot ont été récupérés avec succès
-    if (!$maillot) {
-        echo "Erreur lors de la récupération des détails du maillot.";
-        exit();
-    }
-} else {
+        // Vérifier si les détails du maillot ont été récupérés avec succès
+        if (!$maillot) {
+            echo "Erreur lors de la récupération des détails du maillot.";
+            exit();
+        }
+    } else {
     // Si l'ID n'est pas défini, rediriger vers une page appropriée
     header("Location: affichermaillots.php");
     exit();

@@ -1,5 +1,21 @@
 <?php
 // functions.php
+
+function connectToDatabase() {
+    // Remplacez ces informations par les paramètres de votre base de données
+    $host = 'localhost';
+    $dbname = 'tests';
+    $username = 'root';
+    $password = 'root';
+
+    try {
+        $db = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $db;
+    } catch (PDOException $e) {
+        die('Erreur de connexion à la base de données : ' . $e->getMessage());
+    }
+}
 function connectDatabase()
 {
     try {
@@ -122,6 +138,38 @@ function deleteMaillot($maillotId) {
         // Gérez les erreurs de suppression (par exemple, enregistrer dans un fichier journal)
         echo "Erreur de suppression : " . $e->getMessage();
     }
+}
+
+function authenticateUser($enteredUsername, $enteredPassword) {
+    $db = connectToDatabase();
+
+    // Remplacez cela par une requête sécurisée à votre base de données
+    $query = $db->prepare("SELECT * FROM users WHERE userName = :userName AND password = :password");
+    $query->bindParam(':userName', $enteredUsername);
+    $query->bindParam(':password', $enteredPassword); // En pratique, utilisez le hachage des mots de passe
+
+    $query->execute();
+    $user = $query->fetch(PDO::FETCH_ASSOC);
+
+    // Vérifier les informations d'identification
+    if ($user) {
+        $_SESSION['userName'] = $enteredUsername;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+
+function isLoggedIn() {
+    return isset($_SESSION['user']);
+}
+
+function logoutUser() {
+    session_destroy();
+    header("Location: login.php");
+    exit();
 }
 
 ?>
