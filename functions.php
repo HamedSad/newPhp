@@ -1,6 +1,6 @@
 <?php
 // functions.php
-
+//****************************** Connexion à la Base de données  *****************************************
 function connectToDatabase()
 {
     // Remplacez ces informations par les paramètres de votre base de données
@@ -17,31 +17,37 @@ function connectToDatabase()
         die('Erreur de connexion à la base de données : ' . $e->getMessage());
     }
 }
-function connectDatabase()
-{
-    try {
-        return new PDO('mysql:host=localhost;dbname=tests;charset=utf8', 'root', 'root');
-    } catch (Exception $e) {
-        die('Erreur de connexion à la base de données : ' . $e->getMessage());
-    }
-}
 
+//****************************** affichermaillots.php allJerseys.php  *****************************************
 function getAllMaillots()
 {
-    $mysqlClient = connectDatabase();
+    $db = connectToDatabase();
 
     $sqlQuery = 'SELECT * FROM maillot';
-    $maillotsStatement = $mysqlClient->query($sqlQuery);
+    $maillotsStatement = $db->query($sqlQuery);
 
     return $maillotsStatement->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getMeilleuresVues()
+{
+    $db = connectToDatabase();
+
+    $sqlQuery = 'SELECT * FROM maillot ORDER BY vues DESC LIMIT 5';
+    $maillotsStatement = $db->query($sqlQuery);
+
+    return $maillotsStatement->fetchAll(PDO::FETCH_ASSOC);
+
+}
+
+
+//****************************** maillot_details.php jerseyDetails.php  *****************************************
 function getMaillotById($id)
 {
-    $mysqlClient = connectDatabase();
+    $db = connectToDatabase();
 
     $sqlQuery = 'SELECT * FROM maillot WHERE id = :id';
-    $maillotStatement = $mysqlClient->prepare($sqlQuery);
+    $maillotStatement = $db->prepare($sqlQuery);
     $maillotStatement->bindParam(':id', $id, PDO::PARAM_INT);
     $maillotStatement->execute();
 
@@ -51,11 +57,11 @@ function getMaillotById($id)
 function incrementerVues($id)
 {
     try {
-        $mysqlClient = connectDatabase();
+        $db = connectToDatabase();
 
         // Sélection de la valeur actuelle de vues
         $sqlSelect = 'SELECT vues FROM maillot WHERE id = :id';
-        $selectStatement = $mysqlClient->prepare($sqlSelect);
+        $selectStatement = $db->prepare($sqlSelect);
         $selectStatement->bindParam(':id', $id, PDO::PARAM_INT);
         $selectStatement->execute();
 
@@ -66,7 +72,7 @@ function incrementerVues($id)
 
         // Mise à jour de la valeur dans la base de données
         $sqlUpdate = 'UPDATE maillot SET vues = :nouvellesVues WHERE id = :id';
-        $updateStatement = $mysqlClient->prepare($sqlUpdate);
+        $updateStatement = $db->prepare($sqlUpdate);
         $updateStatement->bindParam(':id', $id, PDO::PARAM_INT);
         $updateStatement->bindParam(':nouvellesVues', $nouvellesVues, PDO::PARAM_INT);
         $updateStatement->execute();
@@ -76,27 +82,44 @@ function incrementerVues($id)
     }
 }
 
-function getMeilleuresVues()
+function updateLikedStatus($maillotId, $liked)
 {
-    $mysqlClient = connectDatabase();
+    $db = connectToDatabase();
 
-    $sqlQuery = 'SELECT * FROM maillot ORDER BY vues DESC LIMIT 5';
-    $maillotsStatement = $mysqlClient->query($sqlQuery);
-
-    return $maillotsStatement->fetchAll(PDO::FETCH_ASSOC);
-
+    $sqlUpdate = 'UPDATE maillot SET liked = :liked WHERE id = :id';
+    $updateStatement = $db->prepare($sqlUpdate);
+    $updateStatement->bindParam(':id', $maillotId, PDO::PARAM_INT);
+    $updateStatement->bindParam(':liked', $liked, PDO::PARAM_BOOL);
+    $updateStatement->execute();
 }
 
+//****************************** confirmationDelete.php  ******************************************************************
+function deleteMaillot($maillotId)
+{
+    $db = connectToDatabase();
+    try {
+        // Préparez et exécutez la requête de suppression
+        $query = "DELETE FROM maillot WHERE id = :id";
+        $statement = $db->prepare($query);
+        $statement->bindParam(':id', $maillotId, PDO::PARAM_INT);
+        $statement->execute();
+    } catch (PDOException $e) {
+        // Gérez les erreurs de suppression (par exemple, enregistrer dans un fichier journal)
+        echo "Erreur de suppression : " . $e->getMessage();
+    }
+}
+
+//****************************** newJersey.php  ******************************************************************
 function newJersey($photo, $joueur, $equipe, $saison, $pays, $couleur, $prix, $liked, $vues)
 {
 
     try {
-        $mysqlClient = connectDatabase();
+        $db = connectToDatabase();
 
         $sql = "INSERT INTO maillot (photo, joueur, equipe, saison, pays, couleur, prix, liked, vues) 
                 VALUES (:photo, :joueur, :equipe, :saison, :pays, :couleur, :prix, :liked, :vues)";
 
-        $insertStatement = $mysqlClient->prepare($sql);
+        $insertStatement = $db->prepare($sql);
 
         // Liaison des valeurs des paramètres
         $insertStatement->bindParam(':photo', $photo, PDO::PARAM_STR);
@@ -117,16 +140,17 @@ function newJersey($photo, $joueur, $equipe, $saison, $pays, $couleur, $prix, $l
     }
 }
 
+//****************************** inscription.php  ******************************************************************
 function newUser($userName, $email, $password, $isAdmin)
 {
 
     try {
-        $mysqlClient = connectDatabase();
+        $db = connectToDatabase();
 
         $sql = "INSERT INTO users (userName, email, password, isAdmin) 
                 VALUES (:userName, :email, :password, :isAdmin)";
 
-        $insertStatement = $mysqlClient->prepare($sql);
+        $insertStatement = $db->prepare($sql);
 
         // Liaison des valeurs des paramètres
         $insertStatement->bindParam(':userName', $userName, PDO::PARAM_STR);
@@ -141,34 +165,27 @@ function newUser($userName, $email, $password, $isAdmin)
     }
 }
 
-function updateLikedStatus($maillotId, $liked)
+// Fonction pour vérifier si un utilisateur existe déjà avec le même nom d'utilisateur
+function userExistsByUsername($userName)
 {
-    $mysqlClient = connectDatabase();
-
-    $sqlUpdate = 'UPDATE maillot SET liked = :liked WHERE id = :id';
-    $updateStatement = $mysqlClient->prepare($sqlUpdate);
-    $updateStatement->bindParam(':id', $maillotId, PDO::PARAM_INT);
-    $updateStatement->bindParam(':liked', $liked, PDO::PARAM_BOOL);
-    $updateStatement->execute();
+    $db = connectToDatabase();
+    $query = $db->prepare("SELECT COUNT(*) FROM users WHERE userName = :userName");
+    $query->bindParam(':userName', $userName, PDO::PARAM_STR);
+    $query->execute();
+    return $query->fetchColumn() > 0;
 }
 
-function deleteMaillot($maillotId)
+// Fonction pour vérifier si un utilisateur existe déjà avec la même adresse e-mail
+function userExistsByEmail($email)
 {
-    try {
-        // Remplacez les informations de connexion par les vôtres
-        $pdo = new PDO("mysql:host=localhost;dbname=tests", "root", "root");
-
-        // Préparez et exécutez la requête de suppression
-        $query = "DELETE FROM maillot WHERE id = :id";
-        $statement = $pdo->prepare($query);
-        $statement->bindParam(':id', $maillotId, PDO::PARAM_INT);
-        $statement->execute();
-    } catch (PDOException $e) {
-        // Gérez les erreurs de suppression (par exemple, enregistrer dans un fichier journal)
-        echo "Erreur de suppression : " . $e->getMessage();
-    }
+    $db = connectToDatabase();
+    $query = $db->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
+    $query->bindParam(':email', $email, PDO::PARAM_STR);
+    $query->execute();
+    return $query->fetchColumn() > 0;
 }
 
+//****************************** login.php  ******************************************************************
 function authenticateUser($enteredUsername, $enteredPassword)
 {
     $db = connectToDatabase();
@@ -195,32 +212,12 @@ function isLoggedIn()
     return isset($_SESSION['user']);
 }
 
+//****************************** logout.php  ******************************************************************
 function logoutUser()
 {
     session_destroy();
     header("Location: login.php");
     exit();
 }
-
-// Fonction pour vérifier si un utilisateur existe déjà avec le même nom d'utilisateur
-function userExistsByUsername($userName)
-{
-    $db = connectToDatabase();
-    $query = $db->prepare("SELECT COUNT(*) FROM users WHERE userName = :userName");
-    $query->bindParam(':userName', $userName, PDO::PARAM_STR);
-    $query->execute();
-    return $query->fetchColumn() > 0;
-}
-
-// Fonction pour vérifier si un utilisateur existe déjà avec la même adresse e-mail
-function userExistsByEmail($email)
-{
-    $db = connectToDatabase();
-    $query = $db->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
-    $query->bindParam(':email', $email, PDO::PARAM_STR);
-    $query->execute();
-    return $query->fetchColumn() > 0;
-}
-
 ?>
 

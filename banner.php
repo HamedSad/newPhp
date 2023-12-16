@@ -14,7 +14,7 @@
         <a href="logout.php">Déconnexion</a>
 
         <?php
-        session_start();
+
 
         // Vérifier si l'utilisateur est connecté
         if (isset($_SESSION['userName'])) {
