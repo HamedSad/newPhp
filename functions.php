@@ -1,7 +1,8 @@
 <?php
 // functions.php
 
-function connectToDatabase() {
+function connectToDatabase()
+{
     // Remplacez ces informations par les paramètres de votre base de données
     $host = 'localhost';
     $dbname = 'tests';
@@ -75,7 +76,8 @@ function incrementerVues($id)
     }
 }
 
-function getMeilleuresVues(){
+function getMeilleuresVues()
+{
     $mysqlClient = connectDatabase();
 
     $sqlQuery = 'SELECT * FROM maillot ORDER BY vues DESC LIMIT 5';
@@ -85,14 +87,15 @@ function getMeilleuresVues(){
 
 }
 
-function newJersey($photo, $joueur, $equipe, $saison, $pays, $couleur, $prix, $liked, $vues){
-    
+function newJersey($photo, $joueur, $equipe, $saison, $pays, $couleur, $prix, $liked, $vues)
+{
+
     try {
         $mysqlClient = connectDatabase();
 
         $sql = "INSERT INTO maillot (photo, joueur, equipe, saison, pays, couleur, prix, liked, vues) 
                 VALUES (:photo, :joueur, :equipe, :saison, :pays, :couleur, :prix, :liked, :vues)";
-        
+
         $insertStatement = $mysqlClient->prepare($sql);
 
         // Liaison des valeurs des paramètres
@@ -114,7 +117,32 @@ function newJersey($photo, $joueur, $equipe, $saison, $pays, $couleur, $prix, $l
     }
 }
 
-function updateLikedStatus($maillotId, $liked){
+function newUser($userName, $email, $password, $isAdmin)
+{
+
+    try {
+        $mysqlClient = connectDatabase();
+
+        $sql = "INSERT INTO users (userName, email, password, isAdmin) 
+                VALUES (:userName, :email, :password, :isAdmin)";
+
+        $insertStatement = $mysqlClient->prepare($sql);
+
+        // Liaison des valeurs des paramètres
+        $insertStatement->bindParam(':userName', $userName, PDO::PARAM_STR);
+        $insertStatement->bindParam(':email', $email, PDO::PARAM_STR);
+        $insertStatement->bindParam(':password', $password, PDO::PARAM_STR);
+        $insertStatement->bindParam(':isAdmin', $isAdmin, PDO::PARAM_STR);
+        // Exécution de la requête
+        $insertStatement->execute();
+
+    } catch (Exception $e) {
+        die('Erreur de connexion à la base de données : ' . $e->getMessage());
+    }
+}
+
+function updateLikedStatus($maillotId, $liked)
+{
     $mysqlClient = connectDatabase();
 
     $sqlUpdate = 'UPDATE maillot SET liked = :liked WHERE id = :id';
@@ -124,7 +152,8 @@ function updateLikedStatus($maillotId, $liked){
     $updateStatement->execute();
 }
 
-function deleteMaillot($maillotId) {
+function deleteMaillot($maillotId)
+{
     try {
         // Remplacez les informations de connexion par les vôtres
         $pdo = new PDO("mysql:host=localhost;dbname=tests", "root", "root");
@@ -140,7 +169,8 @@ function deleteMaillot($maillotId) {
     }
 }
 
-function authenticateUser($enteredUsername, $enteredPassword) {
+function authenticateUser($enteredUsername, $enteredPassword)
+{
     $db = connectToDatabase();
 
     // Remplacez cela par une requête sécurisée à votre base de données
@@ -160,16 +190,37 @@ function authenticateUser($enteredUsername, $enteredPassword) {
     }
 }
 
-
-
-function isLoggedIn() {
+function isLoggedIn()
+{
     return isset($_SESSION['user']);
 }
 
-function logoutUser() {
+function logoutUser()
+{
     session_destroy();
     header("Location: login.php");
     exit();
 }
 
+// Fonction pour vérifier si un utilisateur existe déjà avec le même nom d'utilisateur
+function userExistsByUsername($userName)
+{
+    $db = connectToDatabase();
+    $query = $db->prepare("SELECT COUNT(*) FROM users WHERE userName = :userName");
+    $query->bindParam(':userName', $userName, PDO::PARAM_STR);
+    $query->execute();
+    return $query->fetchColumn() > 0;
+}
+
+// Fonction pour vérifier si un utilisateur existe déjà avec la même adresse e-mail
+function userExistsByEmail($email)
+{
+    $db = connectToDatabase();
+    $query = $db->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
+    $query->bindParam(':email', $email, PDO::PARAM_STR);
+    $query->execute();
+    return $query->fetchColumn() > 0;
+}
+
 ?>
+
