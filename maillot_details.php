@@ -14,22 +14,32 @@
     </head>
     <body>
 
-        <?php
-        include 'banner.php';
-        include 'functions.php';
+    <?php
+    session_start();
+    include 'banner.php';
+    include 'functions.php';
 
-        $maillotId = $_GET['id'];
-        incrementerVues($maillotId);
-        $maillot = getMaillotById($maillotId);
+    // Démarrer la session (assurez-vous de démarrer la session avant d'accéder à $_SESSION)
+    
+    $maillotId = $_GET['id'];
+    incrementerVues($maillotId);
+    $maillot = getMaillotById($maillotId);
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Si le formulaire a été soumis, mettre à jour l'état "liked" dans la base de données
-            updateLikedStatus($maillotId, !$maillot['liked']);
-            $maillot = getMaillotById($maillotId); // Mettre à jour la variable $maillot après la mise à jour
-        
-        }
 
-        ?>
+    // Vérifier si l'utilisateur est connecté et est un administrateur
+    if (isset($_SESSION['userName']) && $_SESSION['userName'] == "admin") {
+        $isAdmin = true;
+    } else {
+        $isAdmin = false;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Si le formulaire a été soumis, mettre à jour l'état "liked" dans la base de données
+        updateLikedStatus($maillotId, !$maillot['liked']);
+        $maillot = getMaillotById($maillotId); // Mettre à jour la variable $maillot après la mise à jour
+    }
+
+    ?>
 
         <div class="maillot-details">
             <img src="<?= $maillot['photo'] ?>" alt="Image du maillot" class="maillot-details-image">
@@ -50,12 +60,15 @@
                     </button>
                 </form>
 
-                <!-- Ajoutez le bouton "Update" -->
-                <a href="updateJersey.php?id=<?= $maillotId ?>" class="update-button">Mettre à jour</a>
+                <!-- Ajoutez le bouton "Update" si l'utilisateur est un administrateur -->
+                <?php if ($isAdmin): ?>
+                    <a href="updateJersey.php?id=<?= $maillotId ?>" class="update-button">Mettre à jour</a>
+                <?php endif; ?>
 
-                <!-- Ajoutez le bouton "Delete" -->
-                <a href="confirmationDelete.php?id=<?= $maillotId ?>" class="update-button">supprimer</a>
-
+                <!-- Ajoutez le bouton "Delete" si l'utilisateur est un administrateur -->
+                <?php if ($isAdmin): ?>
+                    <a href="confirmationDelete.php?id=<?= $maillotId ?>" class="update-button">Supprimer</a>
+                <?php endif; ?>
             </div>
         </div>
 

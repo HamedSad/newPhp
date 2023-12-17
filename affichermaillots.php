@@ -11,8 +11,9 @@
     <body>
         <div class="wrapper">
             <?php
-            include 'functions.php';
+            session_start();
             include 'banner.php';
+            include 'functions.php';
             include 'meilleuresVues.php';
 
             $allMaillots = getAllMaillots();
@@ -38,3 +39,4 @@
 
     </body>
 </html>
+

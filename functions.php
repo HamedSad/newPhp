@@ -29,6 +29,7 @@ function getAllMaillots()
     return $maillotsStatement->fetchAll(PDO::FETCH_ASSOC);
 }
 
+//****************************** meilleuresVues.php bestJerseys.php  *****************************************
 function getMeilleuresVues()
 {
     $db = connectToDatabase();
@@ -91,6 +92,24 @@ function updateLikedStatus($maillotId, $liked)
     $updateStatement->bindParam(':id', $maillotId, PDO::PARAM_INT);
     $updateStatement->bindParam(':liked', $liked, PDO::PARAM_BOOL);
     $updateStatement->execute();
+}
+
+function getUserById($userId)
+{
+    $db = connectToDatabase();
+
+    // Évitez les attaques par injection SQL en utilisant des déclarations préparées
+    $stmt = $db->prepare("SELECT * FROM users WHERE userId = :userId");
+    $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+    $stmt->execute();
+
+    // Vérifiez si l'utilisateur existe
+    if ($stmt->rowCount() > 0) {
+        $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $userData;
+    } else {
+        return null; // L'utilisateur n'a pas été trouvé
+    }
 }
 
 //****************************** confirmationDelete.php  ******************************************************************
