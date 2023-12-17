@@ -94,24 +94,6 @@ function updateLikedStatus($maillotId, $liked)
     $updateStatement->execute();
 }
 
-function getUserById($userId)
-{
-    $db = connectToDatabase();
-
-    // Évitez les attaques par injection SQL en utilisant des déclarations préparées
-    $stmt = $db->prepare("SELECT * FROM users WHERE userId = :userId");
-    $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
-    $stmt->execute();
-
-    // Vérifiez si l'utilisateur existe
-    if ($stmt->rowCount() > 0) {
-        $userData = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $userData;
-    } else {
-        return null; // L'utilisateur n'a pas été trouvé
-    }
-}
-
 //****************************** confirmationDelete.php  ******************************************************************
 function deleteMaillot($maillotId)
 {
@@ -203,6 +185,10 @@ function userExistsByEmail($email)
     $query->execute();
     return $query->fetchColumn() > 0;
 }
+
+//****************************** basket.php  ******************************************************************
+
+
 
 //****************************** login.php  ******************************************************************
 function authenticateUser($enteredUsername, $enteredPassword)

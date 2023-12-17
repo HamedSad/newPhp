@@ -1,3 +1,26 @@
+<?php
+session_start();
+include 'banner.php';
+include 'functions.php';
+
+$maillotId = $_GET['id'];
+incrementerVues($maillotId);
+$maillot = getMaillotById($maillotId);
+
+// Vérifier si l'utilisateur est connecté et est un administrateur
+if (isset($_SESSION['userName']) && $_SESSION['userName'] == "admin") {
+    $isAdmin = true;
+} else {
+    $isAdmin = false;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Si le formulaire a été soumis, mettre à jour l'état "liked" dans la base de données
+    updateLikedStatus($maillotId, !$maillot['liked']);
+    $maillot = getMaillotById($maillotId); // Mettre à jour la variable $maillot après la mise à jour
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -14,33 +37,6 @@
     </head>
     <body>
 
-    <?php
-    session_start();
-    include 'banner.php';
-    include 'functions.php';
-
-    // Démarrer la session (assurez-vous de démarrer la session avant d'accéder à $_SESSION)
-    
-    $maillotId = $_GET['id'];
-    incrementerVues($maillotId);
-    $maillot = getMaillotById($maillotId);
-
-
-    // Vérifier si l'utilisateur est connecté et est un administrateur
-    if (isset($_SESSION['userName']) && $_SESSION['userName'] == "admin") {
-        $isAdmin = true;
-    } else {
-        $isAdmin = false;
-    }
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Si le formulaire a été soumis, mettre à jour l'état "liked" dans la base de données
-        updateLikedStatus($maillotId, !$maillot['liked']);
-        $maillot = getMaillotById($maillotId); // Mettre à jour la variable $maillot après la mise à jour
-    }
-
-    ?>
-
         <div class="maillot-details">
             <img src="<?= $maillot['photo'] ?>" alt="Image du maillot" class="maillot-details-image">
             <div class="maillot-details-info">
@@ -53,22 +49,29 @@
                 <p>Joueur:
                     <?= $maillot['joueur'] ?></p>
 
-                <!-- Ajoutez le bouton "Like" -->
+                <!--bouton "Like" -->
                 <form action="<?php echo $_SERVER['PHP_SELF'] . '?id=' . $maillotId; ?>" method="post">
                     <button type="submit" class="like-button">
                         <?= $maillot['liked'] ? 'Unlike' : 'Like'; ?>
                     </button>
                 </form>
 
-                <!-- Ajoutez le bouton "Update" si l'utilisateur est un administrateur -->
+                <!-- bouton "Update" si l'utilisateur est un administrateur -->
                 <?php if ($isAdmin): ?>
                     <a href="updateJersey.php?id=<?= $maillotId ?>" class="update-button">Mettre à jour</a>
                 <?php endif; ?>
 
-                <!-- Ajoutez le bouton "Delete" si l'utilisateur est un administrateur -->
+                <!-- bouton "Delete" si l'utilisateur est un administrateur -->
                 <?php if ($isAdmin): ?>
                     <a href="confirmationDelete.php?id=<?= $maillotId ?>" class="update-button">Supprimer</a>
                 <?php endif; ?>
+
+                <!-- bouton "Ajouter au panier" -->
+                <form action="basket.php" method="post">
+                    <input type="hidden" name="maillotId" value="<?= $maillotId ?>">
+                    <button type="submit" class="basket-button">Ajouter au panier</button>
+                </form>
+
             </div>
         </div>
 
