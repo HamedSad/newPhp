@@ -42,10 +42,21 @@ if (isset($_POST['maillotId'])) {
         <h1>Votre Panier</h1>
 
     <?php
+    // Afficher le message de succès s'il existe
+    if (isset($_SESSION['success_message'])) {
+        echo "<div class='success-popup'>{$_SESSION['success_message']}</div>";
+        unset($_SESSION['success_message']); // Effacer le message après l'avoir affiché
+    }
+
+    // Afficher le message s'il existe
+    if (isset($_SESSION['message'])) {
+        echo "<p>{$_SESSION['message']}</p>";
+        unset($_SESSION['message']); // Effacer le message après l'avoir affiché
+    }
+
     // Vérifier si le panier est vide
     if (empty($_SESSION['basket'])) {
         echo "<p>Votre panier est vide.</p>";
-        echo $_SESSION['basket'];
     } else {
         // Afficher les détails des maillots dans le panier
         foreach ($_SESSION['basket'] as $jerseyId => $value) {
@@ -73,6 +84,14 @@ if (isset($_POST['maillotId'])) {
             function confirmRetirer() {
 return confirm("Êtes-vous sûr de vouloir retirer cet article du panier?");
 }
+
+// Afficher la fenêtre pop-up de succès après un court délai
+setTimeout(function () {
+var successPopup = document.querySelector('.success-popup');
+if (successPopup) {
+successPopup.style.display = 'none';
+}
+}, 3000); // Disparaît après 3 secondes
         </script>
     </body>
 </html>
