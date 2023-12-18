@@ -1,18 +1,26 @@
 <?php
-
 session_start();
 include 'functions.php';
 
+// Vérifier si l'utilisateur est déjà connecté
 if (isLoggedIn()) {
     header("Location: affichermaillots.php");
     exit();
 }
 
+// Si le formulaire de connexion est soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $enteredUsername = $_POST['userName'];
     $enteredPassword = $_POST['password'];
 
-    if (authenticateUser($enteredUsername, $enteredPassword)) {
+    // Authentifier l'utilisateur
+    $user = authenticateUser($enteredUsername, $enteredPassword);
+
+    if ($user) {
+        // Authentification réussie, stocker l'ID de l'utilisateur dans la session
+        $_SESSION['userId'] = $user['id'];
+
+        // Rediriger vers la page d'affichage des maillots
         header("Location: affichermaillots.php");
         exit();
     } else {
@@ -20,8 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<!-- Reste du code HTML pour la page de connexion -->
 
+<!-- Reste du code HTML pour la page de connexion -->
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -31,8 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-
-
         <div class="login-container">
             <h2>Connexion</h2>
 
@@ -53,7 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit">Se connecter</button>
             </form>
         </div>
-
     </body>
 </html>
 

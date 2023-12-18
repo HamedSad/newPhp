@@ -41,6 +41,8 @@ if (isset($_POST['maillotId'])) {
     <body>
         <h1>Votre Panier</h1>
 
+        <h2>Etape 1/4 : Validez votre panier</h2>
+
     <?php
     // Afficher le message de succès s'il existe
     if (isset($_SESSION['success_message'])) {
@@ -75,9 +77,12 @@ if (isset($_POST['maillotId'])) {
                 echo "<a href='basket.php?deleteFromBasket={$jerseyId}' onclick='return confirmRetirer()'>Retirer du panier</a>";
                 echo "</div>";
             }
+
         }
+        echo "<a href='payment.php'>Procéder au paiement</a>";
     }
     ?>
+
 
         <!-- Fonction de confirmation pour le retrait -->
         <script>

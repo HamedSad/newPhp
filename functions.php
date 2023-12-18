@@ -55,6 +55,19 @@ function getMaillotById($id)
     return $maillotStatement->fetch(PDO::FETCH_ASSOC);
 }
 
+function getUserByName($userName)
+{
+    $db = connectToDatabase();
+
+    $sqlQuery = 'SELECT * FROM users WHERE userName = :userName';
+    $userStatement = $db->prepare($sqlQuery);
+    $userStatement->bindParam(':userName', $userName, PDO::PARAM_STR);
+    $userStatement->execute();
+
+    // Utilisez fetch plutôt que fetchAll, car nous nous attendons à une seule ligne
+    return $userStatement->fetch(PDO::FETCH_ASSOC);
+}
+
 function incrementerVues($id)
 {
     try {
