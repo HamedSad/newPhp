@@ -2,7 +2,7 @@
 session_start();
 
 include 'banner.php';
-include 'functions.php';
+include_once 'functions.php';
 
 // Supprimer un maillot du panier
 if (isset($_GET['deleteFromBasket'])) {
@@ -79,7 +79,7 @@ if (isset($_POST['maillotId'])) {
             }
 
         }
-        echo "<a href='payment.php'>Procéder au paiement</a>";
+        echo "<a href='shipment.php'>Procéder au paiement</a>";
     }
     ?>
 

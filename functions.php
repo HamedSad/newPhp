@@ -107,6 +107,33 @@ function updateLikedStatus($maillotId, $liked)
     $updateStatement->execute();
 }
 
+//****************************** updateJersey.php  ******************************************************************
+function updateMaillotInfo($jersey_id, $new_photo, $new_equipe, $new_joueur, $new_saison, $new_pays, $new_couleur, $new_prix, $new_liked, $new_vues)
+{
+    try {
+        $db = connectToDatabase();
+
+        $update_query = "UPDATE maillot SET 
+            photo = '$new_photo', 
+            equipe = '$new_equipe', 
+            joueur = '$new_joueur', 
+            saison = '$new_saison', 
+            pays = '$new_pays', 
+            couleur = '$new_couleur', 
+            prix = '$new_prix', 
+            liked = '$new_liked', 
+            vues = '$new_vues' 
+            WHERE id = $jersey_id";
+
+        $update_result = $db->exec($update_query);
+
+        return $update_result;
+
+    } catch (Exception $e) {
+        die('Erreur lors de la mise à jour du maillot : ' . $e->getMessage());
+    }
+}
+
 //****************************** confirmationDelete.php  ******************************************************************
 function deleteMaillot($maillotId)
 {
@@ -208,9 +235,42 @@ function userExistsByEmail($email)
     return $query->fetchColumn() > 0;
 }
 
-//****************************** basket.php  ******************************************************************
+//****************************** shipment.php  ******************************************************************
+function updateUserInfo($userName, $new_nom, $new_prenom, $new_adresse, $new_complementAdresse, $new_codePostal, $new_commune, $new_pays)
+{
+    try {
+        $db = connectToDatabase();
 
+        $update_query = "UPDATE users SET 
+            nom = '$new_nom', 
+            prenom = '$new_prenom', 
+            adresse = '$new_adresse', 
+            complementAdresse = '$new_complementAdresse', 
+            codePostal = '$new_codePostal', 
+            commune = '$new_commune', 
+            pays = '$new_pays' 
+            WHERE userName = '$userName'";
 
+        $update_result = $db->exec($update_query);
+
+        return $update_result;
+
+    } catch (Exception $e) {
+        die('Erreur lors de la mise à jour des détails de l\'utilisateur : ' . $e->getMessage());
+    }
+}
+
+//****************************** banner.php  ******************************************************************
+
+// Fonction pour obtenir le nombre total d'articles dans le panier
+function getTotalArticlesInBasket()
+{
+    if (isset($_SESSION['basket'])) {
+        return count($_SESSION['basket']);
+    } else {
+        return 0;
+    }
+}
 
 //****************************** login.php  ******************************************************************
 function authenticateUser($enteredUsername, $enteredPassword)

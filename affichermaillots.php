@@ -13,7 +13,7 @@
             <?php
             session_start();
             include 'banner.php';
-            include 'functions.php';
+            include_once 'functions.php';
             include 'meilleuresVues.php';
 
             $allMaillots = getAllMaillots();

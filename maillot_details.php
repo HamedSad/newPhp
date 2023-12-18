@@ -1,7 +1,7 @@
 <?php
 session_start();
 include 'banner.php';
-include 'functions.php';
+include_once 'functions.php';
 
 $maillotId = $_GET['id'];
 incrementerVues($maillotId);

@@ -1,5 +1,5 @@
 <!-- inscription.php   --><?php
-include 'functions.php';
+include_once 'functions.php';
 session_start();
 
 // Vérifier si le formulaire a été soumis
