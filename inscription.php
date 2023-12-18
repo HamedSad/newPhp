@@ -9,6 +9,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
     $isAdmin = 0;
+    $nom = "";
+    $prenom = "";
+    $adresse = "";
+    $complementAdresse = "";
+    $codePostal = "";
+    $commune = "";
+    $pays = "";
+
 
     // Vérifier s'il existe déjà un utilisateur avec le même nom d'utilisateur
     if (userExistsByUsername($userName)) {
@@ -26,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     // Appeler la fonction pour ajouter le user
-    $userId = newUser($userName, $email, $password, $isAdmin);
+    $userId = newUser($userName, $email, $password, $isAdmin, $nom, $prenom, $adresse, $complementAdresse, $codePostal, $commune, $pays);
 
     // Utilisateur ajouté avec succès
     if ($userId !== false) {

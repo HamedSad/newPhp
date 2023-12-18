@@ -142,14 +142,14 @@ function newJersey($photo, $joueur, $equipe, $saison, $pays, $couleur, $prix, $l
 }
 
 //****************************** inscription.php  ******************************************************************
-function newUser($userName, $email, $password, $isAdmin)
+function newUser($userName, $email, $password, $isAdmin, $nom, $prenom, $adresse, $complementAdresse, $codePostal, $commune, $pays)
 {
 
     try {
         $db = connectToDatabase();
 
-        $sql = "INSERT INTO users (userName, email, password, isAdmin) 
-                VALUES (:userName, :email, :password, :isAdmin)";
+        $sql = "INSERT INTO users (userName, email, password, isAdmin, nom, prenom, adresse, complementAdresse, codePostal, commune, pays) 
+                VALUES (:userName, :email, :password, :isAdmin, :nom, :prenom, :adresse, :complementAdresse, :codePostal, :commune, :pays)";
 
         $insertStatement = $db->prepare($sql);
 
@@ -158,6 +158,15 @@ function newUser($userName, $email, $password, $isAdmin)
         $insertStatement->bindParam(':email', $email, PDO::PARAM_STR);
         $insertStatement->bindParam(':password', $password, PDO::PARAM_STR);
         $insertStatement->bindParam(':isAdmin', $isAdmin, PDO::PARAM_STR);
+
+        $insertStatement->bindParam(':nom', $nom, PDO::PARAM_STR);
+        $insertStatement->bindParam(':prenom', $prenom, PDO::PARAM_STR);
+        $insertStatement->bindParam(':adresse', $adresse, PDO::PARAM_STR);
+        $insertStatement->bindParam(':complementAdresse', $complementAdresse, PDO::PARAM_STR);
+        $insertStatement->bindParam(':codePostal', $codePostal, PDO::PARAM_STR);
+        $insertStatement->bindParam(':commune', $commune, PDO::PARAM_STR);
+        $insertStatement->bindParam(':pays', $pays, PDO::PARAM_STR);
+
         // Exécution de la requête
         $insertStatement->execute();
 

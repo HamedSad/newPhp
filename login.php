@@ -36,6 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="login-container">
             <h2>Connexion</h2>
 
+            <h2>Pas encore inscrit?</h2>
+            <a href="inscription.php">Clique ici</a>
+
             <?php if (isset($error_message)): ?>
                 <p class="error-message"><?= $error_message ?></p>
             <?php endif; ?>
